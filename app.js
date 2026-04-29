@@ -6,13 +6,26 @@ const projectsRouter = require('./routes/projects');
 // JSON parsing middleware
 app.use(express.json());
 
+// Mock Authentication Middleware
+// Simulates an authenticated user. In a real app, this would verify a JWT or session.
+app.use((req, res, next) => {
+  // Hardcoded for testing. You can change this to simulate different roles/tenants.
+  req.user = {
+    id: 1,
+    tenantId: 1, // Pouch.io
+    role: 'admin' // admin | manager | employee
+  };
+  next();
+});
+
 // Main entry route
 app.get('/', (req, res) => {
   res.json({
     name: 'CorpFlow SaaS API',
     version: '1.0.0-beta',
     status: 'online',
-    message: 'Welcome to the CorpFlow internal workforce management API.'
+    message: 'Welcome to the CorpFlow internal workforce management API.',
+    currentUser: req.user
   });
 });
 
